@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
 export const genreOrCate = createSlice({
@@ -10,10 +11,14 @@ export const genreOrCate = createSlice({
   reducers: {
     selectGenreOrCate: (state, action) => {
       state.genreIdOrCateName = action.payload;
+      state.searchQuery = '';
+    },
+    searchMovie: (state, action) => {
+      state.searchQuery = action.payload;
     },
   },
 });
 
-export const { selectGenreOrCate } = genreOrCate.actions;
+export const { selectGenreOrCate, searchMovie } = genreOrCate.actions;
 
 export default genreOrCate.reducer;
