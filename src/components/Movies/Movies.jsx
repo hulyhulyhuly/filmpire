@@ -1,19 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Box, CircularProgress, useMediaQuery, Typography } from '@mui/material';
+import React from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
 import { useGetMoviesQuery } from '../../services/TMDB';
+// eslint-disable-next-line import/no-cycle
+import { MovieList } from '..';
 
 const Movies = () => {
-  const { data } = useGetMoviesQuery();
+  const { data, error, isFetching } = useGetMoviesQuery();
 
-  console.log(data);
+  if (isFetching) {
+    return (
+      <Box display="flex" justifyContent="center">
+        <CircularProgress size="4rem" />
+      </Box>
+    );
+  }
+
+  if (!data.results.length) {
+    return (
+      <Box display="flex" alignItems="center" mt="20px">
+        <Typography variant="h4">
+          No movies that macth that name.
+          <br />
+          Please search for something else.
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) return 'An error has occured.';
 
   return (
-    <div>
-      Movies
-      <hr />
-    </div>
+    <MovieList movies={data} />
   );
 };
 export default Movies;
