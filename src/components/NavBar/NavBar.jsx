@@ -4,7 +4,6 @@ import { AppBar, Avatar, Button, Drawer, IconButton, Toolbar, useMediaQuery } fr
 import { AccountCircle, Brightness4, Brightness7, Menu } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
-// eslint-disable-next-line import/no-cycle
 import { Sidebar } from '..';
 import useStyles from './styles';
 
@@ -22,15 +21,15 @@ const NavBar = () => {
         <Toolbar className={classes.toolbar}>
 
           {isMobile && (
-          <IconButton
-            color="inherit"
-            edge="start"
-            style={{ outline: 'none' }}
-            onClick={() => setMobileOpen((prevMobileOpen) => !prevMobileOpen)}
-            className={classes.menuButton}
-          >
-            <Menu />
-          </IconButton>
+            <IconButton
+              color="inherit"
+              edge="start"
+              style={{ outline: 'none' }}
+              onClick={() => setMobileOpen((prevMobileOpen) => !prevMobileOpen)}
+              className={classes.menuButton}
+            >
+              <Menu />
+            </IconButton>
           )}
 
           <IconButton
@@ -65,9 +64,12 @@ const NavBar = () => {
                 </Button>
               )}
           </div>
+
           {isMobile && 'Search...'}
+
         </Toolbar>
       </AppBar>
+
       <div>
         <nav className={classes.drawer}>
           {isMobile

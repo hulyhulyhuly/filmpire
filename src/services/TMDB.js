@@ -17,12 +17,19 @@ export const tmdbApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    /* Get Genres */
+    getGenres: builder.query({
+      query: () => 'genre/movie/list',
+    }),
+
+    /* Get Movies by [Type] */
     getMovies: builder.query({
-      query: () => `movie/popular?language=en-US&page=${page}`,
+      query: () => `movie/popular?page=${page}`,
     }),
   }),
 });
 
 export const {
+  useGetGenresQuery,
   useGetMoviesQuery,
 } = tmdbApi;
