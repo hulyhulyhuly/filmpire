@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, CircularProgress, Divider, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import { useTheme } from '@mui/styles';
 
-import { selectGenreOrCategory } from '../../features/currentGenreOrCategory';
+import { selectGenreOrCate } from '../../features/currentGenreOrCate';
 import { useGetGenresQuery } from '../../services/TMDB';
 import useStyles from './styles';
 import genresIcons from '../../assets/genres';
@@ -19,6 +19,7 @@ const cates = [
 ];
 
 const Sidebar = ({ setMobileOpen }) => {
+  // const { genreIdOrCatename } = useSelector((state) => state.currentGenreOrCate);
   const theme = useTheme();
   const classes = useStyles();
   const { data, isFetching } = useGetGenresQuery();
@@ -40,7 +41,7 @@ const Sidebar = ({ setMobileOpen }) => {
         <ListSubheader>Categories</ListSubheader>
         {cates.map(({ label, value }) => (
           <Link key={value} className={classes.links} to="/">
-            <ListItem onClick={() => dispatch(selectGenreOrCategory(value))}>
+            <ListItem onClick={() => dispatch(selectGenreOrCate(value))}>
               <ListItemIcon>
                 <img src={genresIcons[label.toLowerCase()]} className={classes.genreImages} height={30} />
               </ListItemIcon>
@@ -58,7 +59,7 @@ const Sidebar = ({ setMobileOpen }) => {
           ? <Box display="flex" justifyContent="center"><CircularProgress /></Box>
           : data.genres.map(({ id, name }) => (
             <Link key={id} className={classes.links} to="/">
-              <ListItem onClick={() => dispatch(selectGenreOrCategory(id))}>
+              <ListItem onClick={() => dispatch(selectGenreOrCate(id))}>
                 <ListItemIcon>
                   <img src={genresIcons[name.toLowerCase()]} className={classes.genreImages} height={30} />
                 </ListItemIcon>

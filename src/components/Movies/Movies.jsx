@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 
+import { selectGenreOrCate } from '../../features/currentGenreOrCate';
 import { useGetMoviesQuery } from '../../services/TMDB';
 // eslint-disable-next-line import/no-cycle
 import { MovieList } from '..';
 
 const Movies = () => {
-  const { data, error, isFetching } = useGetMoviesQuery();
+  const [page, setPage] = useState(1);
+  const { genreIdOrCateName } = useSelector((state) => state.currentGenreOrCate);
+  const { data, error, isFetching } = useGetMoviesQuery({ genreIdOrCateName, page });
 
   if (isFetching) {
     return (
