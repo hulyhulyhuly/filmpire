@@ -4,6 +4,7 @@ import { AppBar, Avatar, Button, Drawer, IconButton, Toolbar, useMediaQuery } fr
 import { AccountCircle, Brightness4, Brightness7, Menu } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
+// eslint-disable-next-line import/no-cycle
 import { Sidebar } from '..';
 import useStyles from './styles';
 

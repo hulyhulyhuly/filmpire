@@ -5,6 +5,7 @@ import { useTheme } from '@mui/styles';
 
 import { useGetGenresQuery } from '../../services/TMDB';
 import useStyles from './styles';
+import genresIcons from '../../assets/genres';
 
 const blueLogo = 'https://fontmeme.com/permalink/210930/8531c658a743debe1e1aa1a2fc82006e.png';
 const redLogo = 'https://fontmeme.com/permalink/210930/6854ae5c7f76597cf8680e48a2c8a50a.png';
@@ -14,13 +15,6 @@ const cates = [
   { label: 'Top Rated', value: 'top_rated' },
   { label: 'Upcoming', value: 'upcoming' },
 ];
-
-// const demoCates = [
-//   { label: 'Comedy', value: 'comedy' },
-//   { label: 'Action', value: 'action' },
-//   { label: 'Horror', value: 'horror' },
-//   { label: 'Animation', value: 'animation' },
-// ];
 
 const Sidebar = ({ setMobileOpen }) => {
   const theme = useTheme();
@@ -44,9 +38,9 @@ const Sidebar = ({ setMobileOpen }) => {
         {cates.map(({ label, value }) => (
           <Link key={value} className={classes.links} to="/">
             <ListItem onClick={() => {}}>
-              {/* <ListItemIcon>
-                <img src={redLogo} className={classes.genreImages} height={30} />
-              </ListItemIcon> */}
+              <ListItemIcon>
+                <img src={genresIcons[label.toLowerCase()]} className={classes.genreImages} height={30} />
+              </ListItemIcon>
               <ListItemText primary={label} />
             </ListItem>
           </Link>
@@ -67,9 +61,13 @@ const Sidebar = ({ setMobileOpen }) => {
             data.genres.map(({ name }) => (
               <Link key={name} className={classes.links} to="/">
                 <ListItem onClick={() => {}}>
-                  {/* <ListItemIcon>
-                <img src={redLogo} className={classes.genreImages} height={30} />
-              </ListItemIcon> */}
+                  <ListItemIcon>
+                    <img
+                      src={genresIcons[name.toLowerCase()]}
+                      className={classes.genreImages}
+                      height={30}
+                    />
+                  </ListItemIcon>
                   <ListItemText primary={name} />
                 </ListItem>
               </Link>
