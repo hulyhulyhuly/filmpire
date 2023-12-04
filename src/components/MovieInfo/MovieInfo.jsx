@@ -6,25 +6,23 @@ import { CircularProgress, Box, Button, ButtonGroup, Grid, Modal, Rating, Typogr
 import { ArrowBack, Favorite, FavoriteBorderOutlined, Movie as MovieIcon, Language, PlusOne, Remove, Theaters } from '@mui/icons-material';
 
 import { selectGenreOrCate } from '../../features/currentGenreOrCate';
-import { useGetMovieQuery } from '../../services/TMDB';
+import { useGetMovieQuery, useGetRecommendationsQuery } from '../../services/TMDB';
 import genreIcons from '../../assets/genres';
 import useStyles from './styles';
+import { MovieList } from '..';
 
 const MovieInfo = () => {
   const { id } = useParams();
   const { data, isFetching, error } = useGetMovieQuery(id);
+  const { data: recommendations, isFetching: _isRecommendationsFetching, error: _recommendationsError } = useGetRecommendationsQuery({ id, list: '/recommendations' });
   const dispatch = useDispatch();
   const cls = useStyles();
 
   const isMovieFavorited = false;
   const addToFavorites = () => {};
-  // const removeFromFavorites = () => {};
 
   const isMovieWatchlisted = true;
   const addToWatchlist = () => {};
-  const removeFromWatchlist = () => {};
-
-  // console.log(data);
 
   if (isFetching) {
     return (
@@ -100,33 +98,43 @@ const MovieInfo = () => {
           }
         </Grid>
 
-        <Grid item container style={{ marginTop: '2rem' }} />
-        <div className={cls.buttonContainer}>
-          <Grid item xs={12} sm={6} className={cls.buttonContainer}>
-            <ButtonGroup size="small" variant="outlined">
-              <Button targer="_blank" rel="noopener noreferrer" href={data?.homepage} endIcon={<Language />}>Website</Button>
-              <Button targer="_blank" rel="noopener noreferrer" href={`https://www.imdb.com/title/${data?.imdb_id}`} endIcon={<MovieIcon />}>IMDB</Button>
-              <Button onClick={() => {}} href="#" endIcon={<Theaters />}>Theater</Button>
-            </ButtonGroup>
-          </Grid>
+        <Grid item container style={{ marginTop: '2rem' }}>
+          <div className={cls.buttonContainer}>
+            <Grid item xs={12} sm={6} className={cls.buttonContainer}>
+              <ButtonGroup size="small" variant="outlined">
+                <Button targer="_blank" rel="noopener noreferrer" href={data?.homepage} endIcon={<Language />}>Website</Button>
+                <Button targer="_blank" rel="noopener noreferrer" href={`https://www.imdb.com/title/${data?.imdb_id}`} endIcon={<MovieIcon />}>IMDB</Button>
+                <Button onClick={() => {}} href="#" endIcon={<Theaters />}>Theater</Button>
+              </ButtonGroup>
+            </Grid>
 
-          <Grid item xs={12} sm={6} className={cls.buttonContainer}>
-            <ButtonGroup size="small" variant="outlined">
-              <Button onClick={addToFavorites} endIcon={isMovieFavorited ? <FavoriteBorderOutlined /> : <Favorite />}>
-                { isMovieFavorited ? 'Unfavorite' : 'Favorite' }
-              </Button>
+            <Grid item xs={12} sm={6} className={cls.buttonContainer}>
+              <ButtonGroup size="small" variant="outlined">
+                <Button onClick={addToFavorites} endIcon={isMovieFavorited ? <FavoriteBorderOutlined /> : <Favorite />}>
+                  { isMovieFavorited ? 'Unfavorite' : 'Favorite' }
+                </Button>
 
-              <Button onClick={addToWatchlist} endIcon={isMovieWatchlisted ? <Remove /> : <PlusOne />}>
-                { isMovieWatchlisted ? 'UnWatchlist' : 'Watchlist' }
-              </Button>
+                <Button onClick={addToWatchlist} endIcon={isMovieWatchlisted ? <Remove /> : <PlusOne />}>
+                  { isMovieWatchlisted ? 'UnWatchlist' : 'Watchlist' }
+                </Button>
 
-              <Button endIcon={<ArrowBack />} sx={{ borderColor: 'primary.main', textUnderline: 'none' }}>
-                <Typography style={{ textDecoration: 'none' }} component={Link} to="/" color="inherit" variant="subtitle2">Back</Typography>
-              </Button>
-            </ButtonGroup>
-          </Grid>
-        </div>
+                <Button endIcon={<ArrowBack />} sx={{ borderColor: 'primary.main', textUnderline: 'none' }}>
+                  <Typography style={{ textDecoration: 'none' }} component={Link} to="/" color="inherit" variant="subtitle2">Back</Typography>
+                </Button>
+              </ButtonGroup>
+            </Grid>
+          </div>
+        </Grid>
       </Grid>
+
+      <Box marginTop="5rem" width="100%">
+        <Typography variant="h3" gutterBottom align="center">You might also like</Typography>
+        {
+          recommendations
+            ? <MovieList movies={recommendations} numberOfMovies={12} />
+            : <Box>Sorry, nothing was found. </Box>
+        }
+      </Box>
     </Grid>
   );
 };
