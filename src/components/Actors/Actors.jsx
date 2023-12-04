@@ -1,9 +1,13 @@
 import React from 'react';
 
-const Actors = () => (
-  <div>
-    Actors
-  </div>
-);
+const Actors = () => {
+  console.log('Actors');
+
+  return (
+    <div>
+      Actors
+    </div>
+  );
+};
 
 export default Actors;
