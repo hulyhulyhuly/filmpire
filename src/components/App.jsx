@@ -7,14 +7,14 @@ import useStyles from './styles';
 import { NavBar, Movies, MovieInfo, Actors, ActorInfo, Profile } from '.';
 
 const App = () => {
-  const classes = useStyles();
+  const cls = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={cls.root}>
       <CssBaseline />
       <NavBar />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+      <main className={cls.content}>
+        <div className={cls.toolbar} />
         <Switch>
           <Route exact path="/">
             <Movies />

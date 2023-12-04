@@ -6,10 +6,10 @@ import { Movie } from '..';
 import useStyles from './styles';
 
 const MovieList = ({ movies }) => {
-  const classes = useStyles();
+  const cls = useStyles();
 
   return (
-    <Grid className={classes.moviesContainer}>
+    <Grid className={cls.moviesContainer}>
       {movies.results.map((m, i) => <Movie key={i} movie={m} i={i} />)}
     </Grid>
   );

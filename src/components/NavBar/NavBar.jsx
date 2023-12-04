@@ -16,7 +16,7 @@ const NavBar = () => {
   const { isAuthenticated, user } = useSelector(userSelector);
   const dispatch = useDispatch();
 
-  const classes = useStyles();
+  const cls = useStyles();
   const isMobile = useMediaQuery('(max-width:600px)');
   const theme = useTheme();
   // const isAuthenticated = false;
@@ -42,7 +42,7 @@ const NavBar = () => {
   return (
     <>
       <AppBar position="fixed">
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className={cls.toolbar}>
 
           {
             isMobile
@@ -52,7 +52,7 @@ const NavBar = () => {
                 edge="start"
                 style={{ outline: 'none' }}
                 onClick={() => setMobileOpen((prevMobileOpen) => !prevMobileOpen)}
-                className={classes.menuButton}
+                className={cls.menuButton}
               >
                 <Menu />
               </IconButton>
@@ -64,7 +64,7 @@ const NavBar = () => {
             sx={{ ml: 1 }}
             style={{ outline: 'none' }}
             onClick={() => {}}
-            className={classes.menuButton}
+            className={cls.menuButton}
           >
             { theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 /> }
           </IconButton>
@@ -84,7 +84,7 @@ const NavBar = () => {
                     color="inherit"
                     component={Link}
                     to={`/profile/${user.id}`}
-                    className={classes.linkButton}
+                    className={cls.linkButton}
                     onClick={() => {}}
                   >
                     { !isMobile && <>My Movies &nbsp;</> }
@@ -100,7 +100,7 @@ const NavBar = () => {
       </AppBar>
 
       <div>
-        <nav className={classes.drawer}>
+        <nav className={cls.drawer}>
           {
             isMobile
               ? (
@@ -109,14 +109,14 @@ const NavBar = () => {
                   anchor="right"
                   open={mobileOpen}
                   onClose={() => setMobileOpen((prevMobileOpen) => !prevMobileOpen)}
-                  classes={{ paper: classes.drawerPaper }}
+                  cls={{ paper: cls.drawerPaper }}
                   ModalProps={{ keepMounted: true }}
                 >
                   <Sidebar setMobileOpen={setMobileOpen} />
                 </Drawer>
               )
               : (
-                <Drawer classes={{ paper: classes.drawerPaper }} variant="permanent" open>
+                <Drawer cls={{ paper: cls.drawerPaper }} variant="permanent" open>
                   <Sidebar setMobileOpen={setMobileOpen} />
                 </Drawer>
               )

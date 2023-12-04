@@ -21,15 +21,15 @@ const cates = [
 const Sidebar = ({ setMobileOpen }) => {
   // const { genreIdOrCatename } = useSelector((state) => state.currentGenreOrCate);
   const theme = useTheme();
-  const classes = useStyles();
+  const cls = useStyles();
   const { data, isFetching } = useGetGenresQuery();
   const dispatch = useDispatch();
 
   return (
     <>
-      <Link to="/" className={classes.imageLink}>
+      <Link to="/" className={cls.imageLink}>
         <img
-          className={classes.image}
+          className={cls.image}
           src={theme.palette.mode === 'light' ? blueLogo : redLogo}
           alt="Filmpire Logo"
         />
@@ -40,10 +40,10 @@ const Sidebar = ({ setMobileOpen }) => {
       <List>
         <ListSubheader>Categories</ListSubheader>
         {cates.map(({ label, value }) => (
-          <Link key={value} className={classes.links} to="/">
+          <Link key={value} className={cls.links} to="/">
             <ListItem onClick={() => dispatch(selectGenreOrCate(value))}>
               <ListItemIcon>
-                <img src={genresIcons[label.toLowerCase()]} className={classes.genreImages} height={30} />
+                <img src={genresIcons[label.toLowerCase()]} className={cls.genreImages} height={30} />
               </ListItemIcon>
               <ListItemText primary={label} />
             </ListItem>
@@ -58,10 +58,10 @@ const Sidebar = ({ setMobileOpen }) => {
         {isFetching
           ? <Box display="flex" justifyContent="center"><CircularProgress /></Box>
           : data.genres.map(({ id, name }) => (
-            <Link key={id} className={classes.links} to="/">
+            <Link key={id} className={cls.links} to="/">
               <ListItem onClick={() => dispatch(selectGenreOrCate(id))}>
                 <ListItemIcon>
-                  <img src={genresIcons[name.toLowerCase()]} className={classes.genreImages} height={30} />
+                  <img src={genresIcons[name.toLowerCase()]} className={cls.genreImages} height={30} />
                 </ListItemIcon>
                 <ListItemText primary={name} />
               </ListItem>
