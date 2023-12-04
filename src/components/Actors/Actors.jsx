@@ -1,11 +1,14 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+
+// useParam to get the actor's id
 
 const Actors = () => {
-  console.log('Actors');
+  const { id } = useParams();
 
   return (
     <div>
-      Actors
+      Actors - {id}
     </div>
   );
 };
