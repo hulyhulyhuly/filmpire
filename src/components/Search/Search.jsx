@@ -10,13 +10,11 @@ import useStyles from './styles';
 
 const Search = () => {
   const [query, setQuery] = useState('');
-  const classes = useStyles();
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      dispatch(searchMovie(query));
-    }
+    if (e.key === 'Enter') dispatch(searchMovie(query));
   };
 
   return (
@@ -29,8 +27,11 @@ const Search = () => {
         InputProps={{
           className: classes.input,
           startAdornment: (
-            <InputAdornment position="start"><SearchIcon /></InputAdornment>
-          ) }}
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
       />
     </div>
   );
