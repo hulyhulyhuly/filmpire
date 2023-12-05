@@ -14,7 +14,7 @@ import { MovieList } from '..';
 const MovieInfo = () => {
   const { id } = useParams();
   const { data, isFetching, error } = useGetMovieQuery(id);
-  const { data: recommendations, isFetching: _isRecommendationsFetching, error: _recommendationsError } = useGetRecommendationsQuery({ id, list: '/recommendations' });
+  const { data: recommendations } = useGetRecommendationsQuery({ id, list: '/recommendations' });
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const cls = useStyles();
@@ -43,7 +43,7 @@ const MovieInfo = () => {
 
   return (
     <Grid container className={cls.containerSpaceAround}>
-      <Grid item sm={12} lg={4}>
+      <Grid item sm={12} lg={4} style={{ display: 'flex', marginBottom: '2rem' }}>
         <img
           className={cls.poster}
           src={`https://image.tmdb.org/t/p/w500/${data?.poster_path}`}
@@ -53,11 +53,11 @@ const MovieInfo = () => {
 
       <Grid item container direction="column" lg={7}>
         <Typography variant="h3" align="center" gutterBottom>
-          {data?.title} ({data?.release_date.split('-')[0]})
+          { data?.title } { data?.release_date.split('-')[0] }
         </Typography>
 
         <Typography variant="h5" align="center" gutterBottom>
-          {data?.tagline}
+          { data?.tagline }
         </Typography>
 
         <Grid item className={cls.containerSpaceAround}>
@@ -67,12 +67,12 @@ const MovieInfo = () => {
           </Box>
 
           <Typography variant="h6" align="center" gutterBottom>
-            { data?.runtime }min /  { data?.spoken_languages.length > 0 ? `${data?.spoken_languages[0].name}` : '' }
+            { data?.runtime }min | Language: { data?.spoken_languages[0].name }
           </Typography>
         </Grid>
 
         <Grid item container className={cls.genresContainer}>
-          {data?.genres?.map((g) => (
+          { data?.genres?.map((g) => (
             <Link key={g.name} className={cls.links} to="/" onClick={() => dispatch(selectGenreOrCate(g.id))}>
               <img src={genreIcons[g.name.toLowerCase()]} className={cls.gerneImages} height={30} />
               <Typography color="textPrimary" variant="subtitle1">{g.name}</Typography>
@@ -133,7 +133,7 @@ const MovieInfo = () => {
         {
           recommendations
             ? <MovieList movies={recommendations} numberOfMovies={12} />
-            : <Box>Sorry, nothing was found. </Box>
+            : <Box>Sorry, nothing was found.</Box>
         }
       </Box>
 

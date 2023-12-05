@@ -18,12 +18,10 @@ export default makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       margin: '0 auto',
       weight: '50%',
-      height: '350px',
     },
     [theme.breakpoints.down('sm')]: {
       margin: '0 auto',
       weight: '100%',
-      height: '350px',
       marginBottom: '30px',
     },
   },
