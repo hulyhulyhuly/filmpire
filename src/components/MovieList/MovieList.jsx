@@ -1,9 +1,8 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 
-// eslint-disable-next-line import/no-cycle
-import { Movie } from '..';
 import useStyles from './styles';
+import { Movie } from '..';
 
 const MovieList = ({ movies, numberOfMovies }) => {
   const cls = useStyles();

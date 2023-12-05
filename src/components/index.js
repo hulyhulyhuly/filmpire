@@ -8,4 +8,5 @@ export { default as MovieList } from './MovieList/MovieList';
 export { default as MovieInfo } from './MovieInfo/MovieInfo';
 export { default as Actors } from './Actors/Actors';
 export { default as Profile } from './Profile/Profile';
+export { default as Pagination } from './Pagination/Pagination';
 

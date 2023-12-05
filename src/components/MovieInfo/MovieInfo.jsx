@@ -89,7 +89,7 @@ const MovieInfo = () => {
             data && data.credits?.cast?.map((c, i) => (
               c.profile_path
               && (
-              <Grid key={i} item xs={4} md={2} style={{ textDecoration: 'none' }} component={Link} to={`/actor/${c.id}`}>
+              <Grid key={i} item xs={4} md={2} style={{ textDecoration: 'none' }} component={Link} to={`/actors/${c.id}`}>
                 <img className={cls.castImage} src={`https://image.tmdb.org/t/p/w500/${c.profile_path}`} />
                 <Typography color="textPrimary">{c.name}</Typography>
                 <Typography color="textSecondary">{c.character.split('-')[0]}</Typography>
@@ -137,11 +137,16 @@ const MovieInfo = () => {
         }
       </Box>
 
-      {console.log(data)}
-
       <Modal closeAfterTransition className={cls.modal} open={open} onClose={() => setOpen(false)}>
         {data?.videos.results.length && (
-          <iframe className={cls.video} autoPlay frameBorder="0" title="Trailer" allow="autoplay" src={`https://www.youtube.com/embed/${data.videos.results[0].key}`} />
+          <iframe
+            className={cls.video}
+            autoPlay
+            title="Trailer"
+            allow="autoplay"
+            src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
+            style={{ border: '0' }}
+          />
         )}
       </Modal>
     </Grid>

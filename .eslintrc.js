@@ -9,7 +9,6 @@ module.exports = {
   ],
   overrides: [
   ],
-  parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
