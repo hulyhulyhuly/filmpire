@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable camelcase */
 import axios from 'axios';
 
 export const movieApi = axios.create({

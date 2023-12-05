@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-// const tmdbApiKey = process.env.REACT_APP_TMDB_KEY;
 const tmdbApiToken = process.env.REACT_APP_TMDB_TOKEN;
 
 export const tmdbApi = createApi({
@@ -49,6 +48,11 @@ export const tmdbApi = createApi({
       query: (id) => `movie/${id}?append_to_response=videos,credits`,
     }),
 
+    // * Get User Specific List
+    getList: builder.query({
+      query: ({ listName, accountId, page }) => `/account/${accountId}/${listName}?page=${page}`,
+    }),
+
     // * Get User Specific Lists
     getRecommendations: builder.query({
       query: ({ id, list }) => `/movie/${id}/${list}`,
@@ -62,6 +66,17 @@ export const tmdbApi = createApi({
     getMovieByActorId: builder.query({
       query: (id) => `/discover/movie?with_cast=${id}`,
     }),
+
+    changeList: builder.mutation({
+      query: ({ user_id, type, body }) => ({
+        method: 'POST',
+        url: `/account/${user_id}/${type}`,
+        params: {
+          session_id: localStorage.getItem('session_id'),
+        },
+        body,
+      }),
+    }),
   }),
 });
 
@@ -69,7 +84,9 @@ export const {
   useGetGenresQuery,
   useGetMoviesQuery,
   useGetMovieQuery,
+  useGetListQuery,
   useGetRecommendationsQuery,
   useGetActorQuery,
   useGetMovieByActorIdQuery,
+  useChangeListMutation,
 } = tmdbApi;

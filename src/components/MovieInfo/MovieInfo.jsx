@@ -1,29 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { CircularProgress, Box, Button, ButtonGroup, Grid, Modal, Rating, Typography, useMediaQuery } from '@mui/material';
-import { ArrowBack, Favorite, FavoriteBorderOutlined, Movie as MovieIcon, Language, PlusOne, Remove, Theaters, Mode } from '@mui/icons-material';
+import { CircularProgress, Box, Button, ButtonGroup, Grid, Modal, Rating, Typography } from '@mui/material';
+import { ArrowBack, Favorite, FavoriteBorderOutlined, Movie as MovieIcon, Language, PlusOne, Remove, Theaters } from '@mui/icons-material';
 
 import { selectGenreOrCate } from '../../features/currentGenreOrCate';
-import { useGetMovieQuery, useGetRecommendationsQuery } from '../../services/TMDB';
+import { useGetMovieQuery, useGetListQuery, useGetRecommendationsQuery, useChangeListMutation } from '../../services/TMDB';
 import genreIcons from '../../assets/genres';
 import useStyles from './styles';
 import { MovieList } from '..';
+import { userSelector } from '../../features/auth';
 
 const MovieInfo = () => {
   const { id } = useParams();
+  const { user } = useSelector(userSelector);
   const { data, isFetching, error } = useGetMovieQuery(id);
+  const { data: favoriteMovies } = useGetListQuery({ listName: 'favorite/movies', accountId: user.id, page: 1 });
+  const { data: watchlistMovies } = useGetListQuery({ listName: 'watchlist/movies', accountId: user.id, page: 1 });
   const { data: recommendations } = useGetRecommendationsQuery({ id, list: '/recommendations' });
-  const dispatch = useDispatch();
+  const [changeList] = useChangeListMutation();
+
   const [open, setOpen] = useState(false);
+  const [isMovieFavorited, setIsMovieFavorited] = useState(false);
+  const [isMovieWatchlisted, setIsMovieWatchlisted] = useState(false);
+
+  const dispatch = useDispatch();
+
   const cls = useStyles();
+  const img_path = 'https://image.tmdb.org/t/p/w500';
 
-  const isMovieFavorited = false;
-  const addToFavorites = () => {};
+  useEffect(() => {
+    setIsMovieFavorited(!!favoriteMovies?.results?.find((m) => m?.id === data?.id));
+  }, [favoriteMovies, data]);
 
-  const isMovieWatchlisted = true;
-  const addToWatchlist = () => {};
+  useEffect(() => {
+    setIsMovieWatchlisted(!!watchlistMovies?.results?.find((m) => m?.id === data?.id));
+  }, [watchlistMovies, data]);
+
+  const addToFavorites = async () => {
+    await changeList({
+      user_id: user.id,
+      type: 'favorite',
+      body: {
+        media_type: 'movie',
+        media_id: id,
+        favorite: !isMovieFavorited,
+      },
+    });
+    setIsMovieFavorited((prev) => !prev);
+  };
+
+  const addToWatchlist = async () => {
+    await changeList({
+      user_id: user.id,
+      type: 'watchlist',
+      body: {
+        media_type: 'movie',
+        media_id: id,
+        watchlist: !isMovieWatchlisted,
+      },
+    });
+    setIsMovieWatchlisted((prev) => !prev);
+  };
 
   if (isFetching) {
     return (
@@ -44,11 +82,7 @@ const MovieInfo = () => {
   return (
     <Grid container className={cls.containerSpaceAround}>
       <Grid item sm={12} lg={4} style={{ display: 'flex', marginBottom: '2rem' }}>
-        <img
-          className={cls.poster}
-          src={`https://image.tmdb.org/t/p/w500/${data?.poster_path}`}
-          alt={data?.title}
-        />
+        <img className={cls.poster} alt={data?.title} src={`${img_path}/${data?.poster_path}`} />
       </Grid>
 
       <Grid item container direction="column" lg={7}>
@@ -62,7 +96,7 @@ const MovieInfo = () => {
 
         <Grid item className={cls.containerSpaceAround}>
           <Box display="flex" align="center">
-            <Rating readOnly value={data.vote_average / 2} />
+            <Rating readOnly value={data.vote_average / 2} precision={0.1} />
             <Typography variant="subtitle1" gutterBottom style={{ marginLeft: '10px' }}>{data?.vote_average} / 10</Typography>
           </Box>
 
@@ -90,7 +124,7 @@ const MovieInfo = () => {
               c.profile_path
               && (
               <Grid key={i} item xs={4} md={2} style={{ textDecoration: 'none' }} component={Link} to={`/actors/${c.id}`}>
-                <img className={cls.castImage} src={`https://image.tmdb.org/t/p/w500/${c.profile_path}`} />
+                <img className={cls.castImage} src={`${img_path}/${c.profile_path}`} />
                 <Typography color="textPrimary">{c.name}</Typography>
                 <Typography color="textSecondary">{c.character.split('-')[0]}</Typography>
               </Grid>
@@ -116,7 +150,7 @@ const MovieInfo = () => {
                 </Button>
 
                 <Button onClick={addToWatchlist} endIcon={isMovieWatchlisted ? <Remove /> : <PlusOne />}>
-                  { isMovieWatchlisted ? 'UnWatchlist' : 'Watchlist' }
+                  Watchlist
                 </Button>
 
                 <Button endIcon={<ArrowBack />} sx={{ borderColor: 'primary.main', textUnderline: 'none' }}>
@@ -131,22 +165,22 @@ const MovieInfo = () => {
       <Box marginTop="5rem" width="100%">
         <Typography variant="h3" gutterBottom align="center">You might also like</Typography>
         {
-          recommendations
+          recommendations?.results.length
             ? <MovieList movies={recommendations} numberOfMovies={12} />
-            : <Box>Sorry, nothing was found.</Box>
+            : <Typography variant="subtitle2" align="center">Sorry, nothing was found.</Typography>
         }
       </Box>
 
       <Modal closeAfterTransition className={cls.modal} open={open} onClose={() => setOpen(false)}>
-        {data?.videos.results.length && (
-          <iframe
-            className={cls.video}
-            autoPlay
-            title="Trailer"
-            allow="autoplay"
-            src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
-            style={{ border: '0' }}
-          />
+        { data?.videos?.results?.length > 0 && (
+        <iframe
+          className={cls.video}
+          autoPlay
+          title="Trailer"
+          allow="autoplay"
+          src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
+          style={{ border: '0' }}
+        />
         )}
       </Modal>
     </Grid>

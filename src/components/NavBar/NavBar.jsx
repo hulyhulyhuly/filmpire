@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppBar, Avatar, Button, Drawer, IconButton, Toolbar, useMediaQuery } from '@mui/material';
 import { AccountCircle, Brightness4, Brightness7, Menu } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
+import { ColorModeContext } from '../../utils/ToggleColorMode';
 import { setUser, userSelector } from '../../features/auth';
-// eslint-disable-next-line import/no-cycle
-import { Search, Sidebar } from '..';
 import { createSessionId, fetchToken, movieApi } from '../../utils';
+import { Search, Sidebar } from '..';
 import useStyles from './styles';
 
 const NavBar = () => {
@@ -16,10 +16,10 @@ const NavBar = () => {
   const { isAuthenticated, user } = useSelector(userSelector);
   const dispatch = useDispatch();
 
+  const colorMode = useContext(ColorModeContext);
   const cls = useStyles();
   const isMobile = useMediaQuery('(max-width:600px)');
   const theme = useTheme();
-  // const isAuthenticated = false;
   const token = localStorage.getItem('request_token');
   const sessionIdFromLocalStorage = localStorage.getItem('session_id');
 
@@ -63,10 +63,10 @@ const NavBar = () => {
             color="inherit"
             sx={{ ml: 1 }}
             style={{ outline: 'none' }}
-            onClick={() => {}}
+            onClick={colorMode.toggleColorMode}
             className={cls.menuButton}
           >
-            { theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 /> }
+            { theme.palette.mode ? <Brightness7 /> : <Brightness4 /> }
           </IconButton>
 
           { !isMobile && <Search /> }
