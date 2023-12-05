@@ -19,11 +19,16 @@ const cates = [
 ];
 
 const Sidebar = ({ setMobileOpen }) => {
-  // const { genreIdOrCatename } = useSelector((state) => state.currentGenreOrCate);
+  const { genreIdOrCateName } = useSelector((state) => state.currentGenreOrCate);
+
+  const { data, isFetching } = useGetGenresQuery();
   const theme = useTheme();
   const cls = useStyles();
-  const { data, isFetching } = useGetGenresQuery();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [genreIdOrCateName]);
 
   return (
     <>

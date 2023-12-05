@@ -7,9 +7,6 @@ import { userSelector } from '../../features/auth';
 import { useGetListQuery } from '../../services/TMDB';
 import RatedCards from '../RatedCards/RatedCards';
 
-// Get access to profile name or id from redux state
-// display in the profile component
-
 const Profile = () => {
   const { user } = useSelector(userSelector);
 
